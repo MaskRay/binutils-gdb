@@ -1,3 +1,7 @@
+2019-12-18  Fangrui Song  <maskray@google.com>
+
+	* options.h (General_options): Add --no-rosegment option.
+
 2019-11-26  Martin Liska  <mliska@suse.cz>
 
 	* layout.cc (Layout::special_ordering_of_input_section):
