@@ -569,6 +569,17 @@ Note that this option is specific to ELF targeted ports.  PE targets
 support a similar function to export all symbols from a DLL or EXE; see
 the description of @samp{--export-all-symbols} below.
 
+@kindex --export-dynamic-symbol=@var{glob}
+@cindex export dynamic symbol
+@item --export-dynamic-symbol=@var{glob}
+When creating a dynamically linked executable, specify a list of
+symbols which should be added to the symbol table in the executable.
+When creating a shared library, specify a list of global symbols whose
+references shouldn't be bound to the definition within the shared
+library. This option is a no-op when creating a shared library and
+@samp{--dynamic-list} is not specified. This option is only meaningful
+on ELF platforms which support shared libraries.
+
 @ifclear SingleFormat
 @cindex big-endian objects
 @cindex endianness

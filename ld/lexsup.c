@@ -504,6 +504,8 @@ static const struct ld_option ld_options[] =
     '\0', NULL, N_("Use C++ typeinfo dynamic list"), TWO_DASHES },
   { {"dynamic-list", required_argument, NULL, OPTION_DYNAMIC_LIST},
     '\0', N_("FILE"), N_("Read dynamic list"), TWO_DASHES },
+  { {"export-dynamic-symbol", required_argument, NULL, OPTION_EXPORT_DYNAMIC_SYMBOL},
+    '\0', N_("SYMBOL"), N_("Read dynamic list"), TWO_DASHES },
   { {"warn-common", no_argument, NULL, OPTION_WARN_COMMON},
     '\0', NULL, N_("Warn about duplicate common symbols"), TWO_DASHES },
   { {"warn-constructors", no_argument, NULL, OPTION_WARN_CONSTRUCTORS},
@@ -581,6 +583,8 @@ parse_args (unsigned argc, char **argv)
     dynamic_list_data,
     dynamic_list
   } opt_dynamic_list = dynamic_list_unset;
+
+  struct bfd_sym_chain export_dynamic_symbol_list = { NULL, NULL };
 
   shortopts = (char *) xmalloc (OPTION_COUNT * 3 + 2);
   longopts = (struct option *)
@@ -1425,6 +1429,15 @@ parse_args (unsigned argc, char **argv)
 	  if (opt_symbolic == symbolic)
 	    opt_symbolic = symbolic_unset;
 	  break;
+	case OPTION_EXPORT_DYNAMIC_SYMBOL:
+	  {
+	    struct bfd_sym_chain *sym;
+	    sym = stat_alloc (sizeof (*sym));
+	    sym->name = xstrdup (optarg);
+	    sym->next = export_dynamic_symbol_list.next;
+	    export_dynamic_symbol_list.next = sym;
+	  }
+	  break;
 	case OPTION_WARN_COMMON:
 	  config.warn_common = TRUE;
 	  break;
@@ -1658,6 +1671,14 @@ parse_args (unsigned argc, char **argv)
 	opt_dynamic_list = dynamic_list_data;
 	break;
       }
+
+  struct bfd_sym_chain *sym;
+  if (opt_dynamic_list != dynamic_list_unset || !bfd_link_dll (&link_info))
+    for (sym = export_dynamic_symbol_list.next; sym != NULL; sym = sym->next)
+      lang_append_dynamic_list (
+	  lang_new_vers_pattern (NULL, sym->name, NULL, FALSE));
+  if (export_dynamic_symbol_list.next && opt_dynamic_list != dynamic_list_data)
+    opt_dynamic_list = dynamic_list;
 
   switch (opt_dynamic_list)
     {
