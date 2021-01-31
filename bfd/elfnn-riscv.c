@@ -3786,15 +3786,6 @@ _bfd_riscv_elf_merge_private_bfd_data (bfd *ibfd, struct bfd_link_info *info)
   if (!is_riscv_elf (ibfd) || !is_riscv_elf (obfd))
     return TRUE;
 
-  if (strcmp (bfd_get_target (ibfd), bfd_get_target (obfd)) != 0)
-    {
-      (*_bfd_error_handler)
-	(_("%pB: ABI is incompatible with that of the selected emulation:\n"
-	   "  target emulation `%s' does not match `%s'"),
-	 ibfd, bfd_get_target (ibfd), bfd_get_target (obfd));
-      return FALSE;
-    }
-
   if (!_bfd_elf_merge_object_attributes (ibfd, info))
     return FALSE;
 
@@ -3809,6 +3800,18 @@ _bfd_riscv_elf_merge_private_bfd_data (bfd *ibfd, struct bfd_link_info *info)
       elf_flags_init (obfd) = TRUE;
       elf_elfheader (obfd)->e_flags = new_flags;
       return TRUE;
+    }
+
+  if (elf_elfheader (ibfd)->e_ident[EI_CLASS]
+	  != elf_elfheader (obfd)->e_ident[EI_CLASS]
+      || elf_elfheader (ibfd)->e_ident[EI_DATA]
+	     != elf_elfheader (obfd)->e_ident[EI_DATA])
+    {
+      (*_bfd_error_handler)
+	(_("%pB: ABI is incompatible with that of the selected emulation:\n"
+	   "  target emulation `%s' does not match `%s'"),
+	 ibfd, bfd_get_target (ibfd), bfd_get_target (obfd));
+      return FALSE;
     }
 
   /* Check to see if the input BFD actually contains any sections.  If not,
@@ -5026,5 +5029,25 @@ riscv_elf_obj_attrs_arg_type (int tag)
 #define elf_backend_obj_attrs_section_type	SHT_RISCV_ATTRIBUTES
 #undef  elf_backend_obj_attrs_section
 #define elf_backend_obj_attrs_section		".riscv.attributes"
+
+#include "elfNN-target.h"
+
+#undef  TARGET_LITTLE_SYM
+#define TARGET_LITTLE_SYM riscv_elfNN_fbsd_vec
+#undef  TARGET_LITTLE_NAME
+#define TARGET_LITTLE_NAME "elfNN-littleriscv-freebsd"
+
+#undef  TARGET_BIG_SYM
+#define TARGET_BIG_SYM riscv_elfNN_fbsd_be_vec
+#undef  TARGET_BIG_NAME
+#define TARGET_BIG_NAME "elfNN-bigriscv-freebsd"
+
+#undef  ELF_OSABI
+#define ELF_OSABI ELFOSABI_FREEBSD
+
+#undef  elf32_bed
+#define elf32_bed elf32_fbsd_bed
+#undef  elf64_bed
+#define elf64_bed elf64_fbsd_bed
 
 #include "elfNN-target.h"

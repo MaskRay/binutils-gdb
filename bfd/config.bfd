@@ -1158,9 +1158,19 @@ case "${targ}" in
     ;;
 
 #ifdef BFD64
+  riscvbe-*-freebsd* | riscv32be*-*-freebsd*)
+    targ_defvec=riscv_elf32_fbsd_be_vec
+    targ_selvecs="riscv_elf32_vec riscv_elf32_be_vec riscv_elf64_vec riscv_elf64_be_vec riscv_elf32_fbsd_vec riscv_elf32_fbsd_be_vec riscv_elf64_fbsd_vec riscv_elf64_fbsd_be_vec"
+    want64=true
+    ;;
   riscvbe-*-* | riscv32be*-*-*)
     targ_defvec=riscv_elf32_be_vec
     targ_selvecs="riscv_elf32_vec riscv_elf64_vec riscv_elf32_be_vec riscv_elf64_be_vec"
+    want64=true
+    ;;
+  riscv-*-freebsd* | riscv32*-*-freebsd*)
+    targ_defvec=riscv_elf32_fbsd_vec
+    targ_selvecs="riscv_elf32_vec riscv_elf32_be_vec riscv_elf64_vec riscv_elf64_be_vec riscv_elf32_fbsd_vec riscv_elf32_fbsd_be_vec riscv_elf64_fbsd_vec riscv_elf64_fbsd_be_vec"
     want64=true
     ;;
   riscv-*-* | riscv32*-*-*)
@@ -1168,9 +1178,19 @@ case "${targ}" in
     targ_selvecs="riscv_elf32_vec riscv_elf64_vec riscv_elf32_be_vec riscv_elf64_be_vec"
     want64=true
     ;;
+  riscv64be*-*-freebsd*)
+    targ_defvec=riscv_elf64_fbsd_be_vec
+    targ_selvecs="riscv_elf32_vec riscv_elf32_be_vec riscv_elf64_vec riscv_elf64_be_vec riscv_elf32_fbsd_vec riscv_elf32_fbsd_be_vec riscv_elf64_fbsd_vec riscv_elf64_fbsd_be_vec"
+    want64=true
+    ;;
   riscv64be*-*-*)
     targ_defvec=riscv_elf64_be_vec
     targ_selvecs="riscv_elf32_vec riscv_elf64_vec riscv_elf32_be_vec riscv_elf64_be_vec"
+    want64=true
+    ;;
+  riscv64*-*-freebsd*)
+    targ_defvec=riscv_elf64_fbsd_vec
+    targ_selvecs="riscv_elf32_vec riscv_elf32_be_vec riscv_elf64_vec riscv_elf64_be_vec riscv_elf32_fbsd_vec riscv_elf32_fbsd_be_vec riscv_elf64_fbsd_vec riscv_elf64_fbsd_be_vec"
     want64=true
     ;;
   riscv64*-*-*)

@@ -91,6 +91,7 @@ eelf32bmipn32.c
 eelf32briscv.c
 eelf32briscv_ilp32.c
 eelf32briscv_ilp32f.c
+eelf32briscv_fbsd.c
 eelf32bsmip.c
 eelf32btsmip.c
 eelf32btsmip_fbsd.c
@@ -124,6 +125,7 @@ eelf32lr5900n32.c
 eelf32lriscv.c
 eelf32lriscv_ilp32.c
 eelf32lriscv_ilp32f.c
+eelf32lriscv_fbsd.c
 eelf32lsmip.c
 eelf32ltsmip.c
 eelf32ltsmip_fbsd.c
@@ -179,6 +181,7 @@ eelf64bpf.c
 eelf64briscv.c
 eelf64briscv_lp64.c
 eelf64briscv_lp64f.c
+eelf64briscv_fbsd.c
 eelf64btsmip.c
 eelf64btsmip_fbsd.c
 eelf64hppa.c
@@ -187,6 +190,7 @@ eelf64lppc_fbsd.c
 eelf64lriscv.c
 eelf64lriscv_lp64.c
 eelf64lriscv_lp64f.c
+eelf64lriscv_fbsd.c
 eelf64ltsmip.c
 eelf64ltsmip_fbsd.c
 eelf64mmix.c
