@@ -628,7 +628,9 @@ class Symbol
     // rather than for being STT_FUNC, because that is what the GNU
     // linker does.
     if (this->type() != elfcpp::STT_OBJECT
-	&& parameters->options().Bsymbolic_functions())
+	&& (parameters->options().Bsymbolic_functions()
+	    || (parameters->options().Bsymbolic_non_weak_functions()
+		&& this->binding() != elfcpp::STB_WEAK)))
       return false;
 
     // Otherwise the symbol is preemptible.

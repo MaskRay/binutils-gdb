@@ -348,6 +348,13 @@ General_options::parse_Bno_symbolic(const char*, const char*,
 }
 
 void
+General_options::parse_Bsymbolic_non_weak_functions(const char*, const char*,
+					   Command_line*)
+{
+  this->bsymbolic_ = BSYMBOLIC_NON_WEAK_FUNCTIONS;
+}
+
+void
 General_options::parse_Bsymbolic_functions(const char*, const char*,
 					   Command_line*)
 {

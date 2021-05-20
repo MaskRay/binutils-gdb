@@ -4434,4 +4434,14 @@ retain_2: retain_2.o ../ld-new
 retain_2.o: retain_2.s
 	$(TEST_AS) -o $@ $<
 
+check_SCRIPTS += bsymbolic_non_weak_functions.sh
+check_DATA += bsymbolic_non_weak_functions.stdout
+MOSTLYCLEANFILES += bsymbolic_non_weak_functions
+bsymbolic_non_weak_functions: bsymbolic_non_weak_functions.o gcctestdir/ld
+	$(CXXLINK) $< -shared -Wl,-Bsymbolic-non-weak-functions
+bsymbolic_non_weak_functions.o: bsymbolic_non_weak_functions.c
+	$(COMPILE) -c -fpic -o $@ $<
+bsymbolic_non_weak_functions.stdout: bsymbolic_non_weak_functions
+	$(TEST_READELF) -rW $< > $@
+
 endif DEFAULT_TARGET_X86_64

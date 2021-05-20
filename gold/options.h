@@ -752,6 +752,11 @@ class General_options
 		      "for -shared (default)"),
 		  NULL);
 
+  DEFINE_special (Bsymbolic_non_weak_functions, options::ONE_DASH, '\0',
+		  N_ ("Bind default visibility defined STB_GLOBAL function symbols "
+		      "locally for -shared"),
+		  NULL);
+
   DEFINE_special (Bsymbolic_functions, options::ONE_DASH, '\0',
 		  N_ ("Bind default visibility defined function symbols "
 		      "locally for -shared"),
@@ -1752,6 +1757,7 @@ class General_options
   enum Bsymbolic_kind
   {
     BSYMBOLIC_NONE,
+    BSYMBOLIC_NON_WEAK_FUNCTIONS,
     BSYMBOLIC_FUNCTIONS,
     BSYMBOLIC_ALL,
   };
@@ -1759,6 +1765,10 @@ class General_options
   bool
   Bsymbolic() const
   { return this->bsymbolic_ == BSYMBOLIC_ALL; }
+
+  bool
+  Bsymbolic_non_weak_functions() const
+  { return this->bsymbolic_ == BSYMBOLIC_NON_WEAK_FUNCTIONS; }
 
   bool
   Bsymbolic_functions() const
