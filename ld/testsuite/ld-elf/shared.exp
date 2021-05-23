@@ -457,6 +457,28 @@ run_ld_link_tests [list \
 	"symbolic-func.so"] \
 ]
 
+if {[istarget "aarch64*-*-*"] || [istarget "powerpc*-*-*"] ||
+    [istarget "i?86-*-*"] || [istarget "x86_64-*-*"]} {
+    run_ld_link_tests [list \
+        [list "-Bsymbolic-non-weak-functions -Bsymbolic" \
+        "-shared -Bsymbolic-non-weak-functions -Bsymbolic" "" "$AFLAGS_PIC" \
+        {symbolic-non-weak-func.s} {{readelf {-r --wide} symbolic-non-weak-func-a.rd}} \
+        "symbolic-non-weak-func-a.so"] \
+    ]
+    run_ld_link_tests [list \
+        [list "-Bsymbolic-non-weak-functions" \
+        "-shared -Bsymbolic-non-weak-functions" "" "$AFLAGS_PIC" \
+        {symbolic-non-weak-func.s} {{readelf {-r --wide} symbolic-non-weak-func-b.rd}} \
+        "symbolic-non-weak-func-b.so"] \
+    ]
+    run_ld_link_tests [list \
+        [list "-Bsymbolic-functions -Bsymbolic-non-weak-functions" \
+        "-shared -Bsymbolic-functions -Bsymbolic-non-weak-functions" "" "$AFLAGS_PIC" \
+        {symbolic-non-weak-func.s} {{readelf {-r --wide} symbolic-non-weak-func-b.rd}} \
+        "symbolic-non-weak-func-b.so"] \
+    ]
+}
+
 run_ld_link_tests [list \
     [list "Build pr20995.so" \
 	"-shared" "" "$AFLAGS_PIC" \

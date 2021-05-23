@@ -369,6 +369,9 @@ struct bfd_link_info
   /* TRUE if all data symbols should be dynamic.  */
   unsigned int dynamic_data: 1;
 
+  /* TRUE if all weak function symbols should be dynamic.  */
+  unsigned int dynamic_weak_functions: 1;
+
   /* TRUE if section groups should be resolved.  */
   unsigned int resolve_section_groups: 1;
 

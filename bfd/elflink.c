@@ -597,14 +597,12 @@ bfd_elf_link_mark_dynamic_symbol (struct bfd_link_info *info,
   if(h->dynamic || bfd_link_relocatable (info))
     return;
 
+  int type = sym != NULL ? ELF_ST_TYPE (sym->st_info) : STT_NOTYPE;
   if ((info->dynamic_data
-       && (h->type == STT_OBJECT
-	   || h->type == STT_COMMON
-	   || (sym != NULL
-	       && (ELF_ST_TYPE (sym->st_info) == STT_OBJECT
-		   || ELF_ST_TYPE (sym->st_info) == STT_COMMON))))
-      || (d != NULL
-	  && h->non_elf
+       && (type == STT_OBJECT || type == STT_COMMON))
+      || (info->dynamic_weak_functions && type == STT_FUNC
+	  && ELF_ST_BIND (sym->st_info) == STB_WEAK)
+      || (d != NULL && h->non_elf
 	  && (*d->match) (&d->head, NULL, h->root.root.string)))
     {
       h->dynamic = 1;

@@ -1620,7 +1620,7 @@ libraries.
 
 @kindex -Bsymbolic
 @item -Bsymbolic
-When creating a shared library, bind references to global symbols to the
+When creating a shared library, bind references to non-local symbols to the
 definition within the shared library, if any.  Normally, it is possible
 for a program linked against a shared library to override the definition
 within the shared library.  This option is only meaningful on ELF
@@ -1628,10 +1628,19 @@ platforms which support shared libraries.
 
 @kindex -Bsymbolic-functions
 @item -Bsymbolic-functions
-When creating a shared library, bind references to global function
-symbols to the definition within the shared library, if any.
+When creating a shared library, bind references to non-local function
+symbols to the definition within the shared library, if any.  A vague linkage
+function definition is weak. It may have different addresses in the linked
+shared library and outside the shared library.
 This option is only meaningful on ELF platforms which support shared
 libraries.
+
+@kindex -Bsymbolic-non-weak-functions
+@item -Bsymbolic-non-weak-functions
+When creating a shared library, bind references to @code{STB_GLOBAL} function
+symbols to the definition within the shared library, if any.  Noticeably this
+option skips C++ vague linkage functions and is thus safe.
+This option is only meaningful on ELF platforms which support shared libraries.
 
 @kindex -Bno-symbolic
 @item -Bno-symbolic

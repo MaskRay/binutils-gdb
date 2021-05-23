@@ -305,9 +305,11 @@ static const struct ld_option ld_options[] =
   { {"Bno-symbolic", no_argument, NULL, OPTION_NO_SYMBOLIC},
     '\0', NULL, N_("Don't bind global references locally"), ONE_DASH },
   { {"Bsymbolic", no_argument, NULL, OPTION_SYMBOLIC},
-    '\0', NULL, N_("Bind global references locally"), ONE_DASH },
+    '\0', NULL, N_("Bind default visibility defined symbols locally for -shared"), ONE_DASH },
+  { {"Bsymbolic-non-weak-functions", no_argument, NULL, OPTION_SYMBOLIC_NON_WEAK_FUNCTIONS},
+    '\0', NULL, N_("Bind default visibility defined STB_GLOBAL function symbols locally for -shared"), ONE_DASH },
   { {"Bsymbolic-functions", no_argument, NULL, OPTION_SYMBOLIC_FUNCTIONS},
-    '\0', NULL, N_("Bind global function references locally"), ONE_DASH },
+    '\0', NULL, N_("Bind default visibility defined function symbols locally for -shared"), ONE_DASH },
   { {"check-sections", no_argument, NULL, OPTION_CHECK_SECTIONS},
     '\0', NULL, N_("Check section addresses for overlaps (default)"),
     TWO_DASHES },
@@ -611,8 +613,9 @@ parse_args (unsigned argc, char **argv)
   enum symbolic_enum
   {
     symbolic_unset = 0,
-    symbolic,
+    symbolic_non_weak_functions,
     symbolic_functions,
+    symbolic,
   } opt_symbolic = symbolic_unset;
   enum dynamic_list_enum
   {
@@ -1309,6 +1312,9 @@ parse_args (unsigned argc, char **argv)
 	case OPTION_SYMBOLIC:
 	  opt_symbolic = symbolic;
 	  break;
+	case OPTION_SYMBOLIC_NON_WEAK_FUNCTIONS:
+	  opt_symbolic = symbolic_non_weak_functions;
+	  break;
 	case OPTION_SYMBOLIC_FUNCTIONS:
 	  opt_symbolic = symbolic_functions;
 	  break;
@@ -1887,6 +1893,11 @@ parse_args (unsigned argc, char **argv)
       case symbolic_functions:
 	link_info.dynamic = true;
 	link_info.dynamic_data = true;
+	break;
+      case symbolic_non_weak_functions:
+	link_info.dynamic = true;
+	link_info.dynamic_data = true;
+	link_info.dynamic_weak_functions = true;
 	break;
       }
 
