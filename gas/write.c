@@ -909,6 +909,14 @@ adjust_reloc_syms (bfd *abfd ATTRIBUTE_UNUSED,
 	if ((symsec->flags & SEC_THREAD_LOCAL) != 0)
 	  continue;
 
+	/* With --reloc-section-sym=none, skip adjustment.
+	   With --reloc-section-sym=internal, only adjust relocs against
+	   internal labels (e.g. .L prefix symbols in ELF).  */
+	if (flag_reloc_section_sym == reloc_section_sym_none
+	    || (flag_reloc_section_sym == reloc_section_sym_internal
+		&& !bfd_is_local_label (stdoutput, symbol_get_bfdsym (sym))))
+	  continue;
+
 	val = S_GET_VALUE (sym);
 
 #if defined(TC_AARCH64) && defined(OBJ_COFF)
@@ -2043,7 +2051,7 @@ maybe_generate_build_notes (void)
       else
 	desc_reloc = BFD_RELOC_64;
     }
-  
+
   /* We have to create a note for *each* code section.
      Linker garbage collection might discard some.  */
   total_size = 0;

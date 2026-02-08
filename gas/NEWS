@@ -1,5 +1,9 @@
 -*- text -*-
 
+* New command line option --reloc-section-sym=[all|internal|none]
+  controls whether relocations referencing local binding symbols are adjusted
+  to use section symbols.
+
 Changes in 2.46:
 
 * Add support for AMD Zen6 processor.
