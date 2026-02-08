@@ -43,7 +43,7 @@ Disassembly of section \.text:
 .*[ 	]+R_386_TLS_LE[ 	]+xtrn
 .*[ 	]+R_386_TLS_LE_32[ 	]+xtrn
 .*[ 	]+R_386_TLS_LE_32[ 	]+xtrn
-.*[ 	]+R_386_PLT32[ 	]+ptr
+.*[ 	]+R_386_PLT32[ 	]+\.data(\+0x[0-9a-f]+)?
 Disassembly of section \.data:
 #...
 .*[ 	]+R_386_32[ 	]+xtrn

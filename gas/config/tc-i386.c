@@ -4137,11 +4137,6 @@ tc_i386_fix_adjustable (fixS *fixP)
       || fixP->fx_r_type == BFD_RELOC_VTABLE_INHERIT
       || fixP->fx_r_type == BFD_RELOC_VTABLE_ENTRY)
     return 0;
-  /* Resolve PLT32 relocation against local symbol to section only for
-     PC-relative relocations.  */
-  if (fixP->fx_r_type == BFD_RELOC_386_PLT32
-      || fixP->fx_r_type == BFD_RELOC_32_PLT_PCREL)
-    return fixP->fx_pcrel;
   return 1;
 }
 #endif
@@ -16658,7 +16653,8 @@ md_apply_fix (fixS *fixP, valueT *valP, segT seg ATTRIBUTE_UNUSED)
       && (fixP->fx_r_type == BFD_RELOC_32_PCREL
 	  || fixP->fx_r_type == BFD_RELOC_64_PCREL
 	  || fixP->fx_r_type == BFD_RELOC_16_PCREL
-	  || fixP->fx_r_type == BFD_RELOC_8_PCREL)
+	  || fixP->fx_r_type == BFD_RELOC_8_PCREL
+	  || fixP->fx_r_type == BFD_RELOC_386_PLT32)
       && !use_rela_relocations)
     {
       /* This is a hack.  There should be a better way to handle this.
@@ -16721,8 +16717,10 @@ md_apply_fix (fixS *fixP, valueT *valP, segT seg ATTRIBUTE_UNUSED)
       case BFD_RELOC_32_PLT_PCREL:
 	/* Make the jump instruction point to the address of the operand.
 	   At runtime we merely add the offset to the actual PLT entry.
-	   NB: Subtract the offset size only for jump instructions.  */
-	if (fixP->fx_pcrel)
+	   NB: Subtract the offset size only for jump instructions.
+	   For i386 REL relocations, the bfd_install_relocation
+	   compensation above handles this.  */
+	if (fixP->fx_pcrel && use_rela_relocations)
 	  value = -4;
 	break;
 
@@ -18428,18 +18426,6 @@ i386_validate_fix (fixS *fixp)
 #ifdef OBJ_ELF
   else
     {
-      /* NB: Commit 292676c1 resolved PLT32 reloc aganst local symbol
-	 to section.  Since PLT32 relocation must be against symbols,
-	 turn such PLT32 relocation into PC32 relocation.  NB: We can
-	 turn PLT32 relocation into PC32 relocation only for PC-relative
-	 relocations since non-PC-relative relocations need PLT entries.
-       */
-      if (fixp->fx_addsy
-	  && fixp->fx_pcrel
-	  && (fixp->fx_r_type == BFD_RELOC_386_PLT32
-	      || fixp->fx_r_type == BFD_RELOC_32_PLT_PCREL)
-	  && symbol_section_p (fixp->fx_addsy))
-	fixp->fx_r_type = BFD_RELOC_32_PCREL;
       if (!object_64bit)
 	{
 	  if (fixp->fx_r_type == BFD_RELOC_386_GOT32
